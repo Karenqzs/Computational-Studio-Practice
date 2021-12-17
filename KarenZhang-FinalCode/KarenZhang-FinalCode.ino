@@ -6,7 +6,7 @@
  * It was modified from CapitiveSense Library Demo Sketch made by by Becky Stern 2013 
  */
  
-CapacitiveSensor   cs_9_10 = CapacitiveSensor(9,10);        // pins 9 & 10 are sensor pins
+CapacitiveSensor   cs_9_10 = CapacitiveSensor(9,10);        // pins 9 & 10 are sensor configuration
 //CapacitiveSensor   cs_9_2 = CapacitiveSensor(9,2);        // add an extrea sensor if it needed
 
 Adafruit_FloraPixel strip = Adafruit_FloraPixel(4);         // set numbers of LED lights
@@ -20,10 +20,11 @@ cs_9_10.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on chan
 
 }
 
+// rainbow function enables LEDs change colors between 256 colors in the wheel
 void rainbow(uint8_t wait) {
   int i, j, k;
    
-  for (j=0; j < 256; j++) {     // 3 cycles of all 256 colors in the wheel
+  for (j=0; j < 256; j++) {     
     for (i=0; i < strip.numPixels(); i++) {
       for (k=0; k < LED_NUM; k++)
       strip.setPixelColor(i, Wheel( (i + j) % 255));
@@ -41,13 +42,13 @@ void loop()
     //long total2 =  cs_9_2.capacitiveSensor(30);  // add an extrea sensor if it needed
    int status = 0 ;
 
-if (total1 > 10){                          // set the level of pressure to turn on the lights
+if (total1 > 10){                          // set Flora's onboard LED (D7) to light up if the sensor reading exceeds 10
   digitalWrite(7, HIGH);
-  rainbow(50);
+  rainbow(50);                            // set the speed of the color wheel
  } else {
   for (num = 0; num < LED_NUM ; num++)
   {
-  strip.setPixelColor(num, Color(255,0,0)); 
+  strip.setPixelColor(num, Color(255,0,0));  // set the color green as a starting color when the sensor doesn't read numbers
   }
   strip.show();
 }
@@ -72,7 +73,7 @@ RGBPixel Color(byte r, byte g, byte b)     // Create a 24 bit color value from R
   return p;
 }
 
-RGBPixel Wheel(byte WheelPos)
+RGBPixel Wheel(byte WheelPos) // Input a value 0 to 255 to get a color value
 {
   if (WheelPos < 85) {
    return Color(WheelPos * 3, 255 - WheelPos * 3, 0);
